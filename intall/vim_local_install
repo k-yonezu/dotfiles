@@ -1,0 +1,52 @@
+インストール先
+${HOME}/local/bin
+
+luaソースファイル
+http://www.lua.org/ftp/lua-5.2.3.tar.gz
+UTF-8対応版？
+https://github.com/satosystems/lua-5.2.2-utf8
+
+vimソースファイル
+http://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
+
+================================
+手順書
+================================
+--------------------------------
+下準備
+--------------------------------
+mkdir -p ~/local/src
+
+--------------------------------
+luaインストール
+--------------------------------
+# luaのコンパイル&インストール 
+cd ~/local/src
+wget http://www.lua.org/ftp/lua-5.2.3.tar.gz
+tar xvf lua-5.2.3.tar.gz
+cd ~/local/src/lua-5.2.3
+make linux MYLIBS="-L ${HOME}/local/lib -ltermcap"
+make install INSTALL_TOP=${HOME}/local
+
+※ readline.hが見つからないエラーが出た場合はsrc/MakefileのCFLAGSに"-I/include/to/path"を指定してあげると通る
+
+--------------------------------
+vimインストール 
+--------------------------------
+#ディレクトリ移動。
+cd ~/loca/src
+sudo git clone https://github.com/vim/vim 
+cd vim/
+
+# vimのコンパイル
+cd ~/local/src
+wget http://ftp.vim.org/pub/vim/unix/vim-7.4.tar.bz2
+tar xvf vim-7.4.tar.bz2
+cd vim74
+
+# vim インストール
+./configure --prefix=${HOME}/local --with-features=huge --enable-multibyte=yes --enable-luainterp=yes --with-lua-prefix=${HOME}/local --enable-fail-if-missing --enable-pythoninterp --with-python-config-dir=/usr/lib/python2.7/config
+make
+~/local/src/vim/src/vim --version | grep '+lua'
+# 表示されること
+make install

@@ -1,0 +1,29 @@
+[push]
+	default = current
+[alias]
+	st = status
+	co = checkout
+	cm = commit
+	br = branch
+	ls = ls-files
+[color]
+	ui = auto
+	diff = auto
+	status = auto
+	branch = auto
+[user]
+	name = name
+	email = email
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[merge]
+	ff = false
+[pull]
+	ff = only
+[core]
+	editor = vim -c \"set fenc=utf-8\"
+[alias]
+	gr = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	gra = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
