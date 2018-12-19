@@ -60,6 +60,8 @@ Plug 'miyakogi/seiya.vim'
 "fzf
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+" 散文
+Plug 'junegunn/goyo.vim'
 "git
 Plug 'tpope/vim-fugitive'
 " コード整形
@@ -101,7 +103,8 @@ Plug 'terryma/vim-multiple-cursors'
 " shell command
 Plug 'b4b4r07/vim-shellutils'
 
-" Plug 'rking/ag.vim'
+" grep
+Plug 'mileszs/ack.vim'
 
 
 call plug#end()
@@ -469,6 +472,28 @@ imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 
+
+"----------------------------------------------------------
+" ack
+"----------------------------------------------------------
+let g:ackprg = 'ag --nogroup --nocolor --column'
+
+"----------------------------------------------------------
+" goyo
+"----------------------------------------------------------
+function! ProseMode()
+  call goyo#execute(0, [])
+  set spell noci nosi noai nolist noshowmode noshowcmd
+  set complete+=s
+  set bg=light
+  if !has('gui_running')
+    let g:solarized_termcolors=256
+  endif
+  colors solarized
+endfunction
+
+command! ProseMode call ProseMode()
+nmap <leader>e :ProseMode
 "---------- plugin setting end ---------
 
 
@@ -568,15 +593,13 @@ source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する
 " バックスペースでなんでも消せるようにする
 set backspace=indent,eol,start
 
-" クリップボードをデフォルトのレジスタとして指定。後にYankRingを使うので
-" 'unnamedplus'が存在しているかどうかで設定を分ける必要がある
-if has('unnamedplus')
-  " set clipboard& clipboard+=unnamedplus " 2013-07-03 14:30 unnamed 追加
-  set clipboard& clipboard+=unnamedplus,unnamed
-else
-  " set clipboard& clipboard+=unnamed,autoselect 2013-06-24 10:00 autoselect削除
-  set clipboard& clipboard+=unnamed
-endif
+" クリップボードにコピー
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
 
 " Swapファイル？Backupファイル？前時代的すぎ
 " なので全て無効化する
