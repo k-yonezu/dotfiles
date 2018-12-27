@@ -106,6 +106,8 @@ Plug 'b4b4r07/vim-shellutils'
 " grep
 Plug 'mileszs/ack.vim'
 
+" tex
+Plug 'lervag/vimtex'
 
 call plug#end()
 "-------- vim-plug end------
@@ -485,15 +487,21 @@ function! ProseMode()
   call goyo#execute(0, [])
   set spell noci nosi noai nolist noshowmode noshowcmd
   set complete+=s
-  set bg=light
-  if !has('gui_running')
-    let g:solarized_termcolors=256
-  endif
-  colors solarized
+  " colorscheme delek
 endfunction
 
 command! ProseMode call ProseMode()
 nmap <leader>e :ProseMode
+
+"----------------------------------------------------------
+" tex
+"----------------------------------------------------------
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.tex = g:vimtex#re#neocomplete
+let g:vimtex_compiler_latexmk = { 'continuous' : 0 }
+let g:vimtex_quickfix_open_on_warning = 0
 "---------- plugin setting end ---------
 
 
