@@ -11,6 +11,7 @@ augroup END
 
 " like Spacemacs
 let mapleader = "\<Space>"
+let maplocalleader = "\<Space>"
 
 " ノーマルモード時だけ ; と : を入れ替える
 nnoremap ;  :
@@ -677,8 +678,8 @@ nnoremap <leader>q  :<C-u>q<CR>
 nnoremap <leader>Q  :<C-u>q!<CR>
 
 " 空行の挿入
-nnoremap <leader>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
-nnoremap <leader>O  :<C-u>for i in range(v:count1) \| call append(line('.')-1, '') \| endfor<CR>
+nnoremap <silent><leader>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
+nnoremap <silent><leader>O  :<C-u>for i in range(v:count1) \| call append(line('.')-1, '') \| endfor<CR>
 
 " ペースト
 vnoremap <silent> y y`]
