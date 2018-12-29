@@ -489,13 +489,13 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 "----------------------------------------------------------
 function! ProseMode()
   call goyo#execute(0, [])
-  set spell noci nosi noai nolist noshowmode noshowcmd
+  " set spell noci nosi noai nolist noshowmode noshowcmd
   set complete+=s
   " colorscheme delek
 endfunction
 
 command! ProseMode call ProseMode()
-nnoremap <leader>e :ProseMode<CR>
+nnoremap <leader>g :ProseMode<CR>
 
 "----------------------------------------------------------
 " tex
@@ -642,8 +642,8 @@ set listchars=tab:\»\ ,extends:»,precedes:«,nbsp:%
 " tab
 augroup set-tab-highlight
   autocmd!
-  autocmd ColorScheme,GUIEnter * highlight SpecialKey guifg=None guibg=None
-  autocmd ColorScheme,VimEnter * highlight SpecialKey ctermfg=None ctermbg=None
+  " autocmd ColorScheme,GUIEnter * highlight SpecialKey guifg=None guibg=None
+  " autocmd ColorScheme,VimEnter * highlight SpecialKey ctermfg=None ctermbg=None
 augroup END
 
 "----------------------------------------------------------
