@@ -247,6 +247,9 @@ let g:indentLine_fileTypeExclude = ['help', 'startify']
 nmap <leader>hj <Plug>GitGutterNextHunk
 nmap <leader>hk <Plug>GitGutterPrevHunk
 " let g:gitgutter_highlight_lines = 1
+set updatetime=250
+" Show gitgutter column always
+set signcolumn=yes
 
 """"""
 " vim-anzu
@@ -257,10 +260,11 @@ nmap N <Plug>(anzu-N)
 nmap * <Plug>(anzu-star)
 nmap # <Plug>(anzu-sharp)
 augroup vim-anzu
-  " 一定時間キー入力がないとき、ウインドウを移動したとき、タブを移動したときに
+  " ウインドウを移動したとき、タブを移動したときに
   " 検索ヒット数の表示を消去する
   autocmd!
-  autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
+  " autocmd CursorHold,CursorHoldI,WinLeave,TabLeave * call anzu#clear_search_status()
+  autocmd WinLeave,TabLeave * call anzu#clear_search_status()
 augroup END
 
 """"""
@@ -491,7 +495,7 @@ function! ProseMode()
 endfunction
 
 command! ProseMode call ProseMode()
-nmap <leader>e :ProseMode
+nnoremap <leader>e :ProseMode<CR>
 
 "----------------------------------------------------------
 " tex
@@ -622,7 +626,7 @@ vmap <Leader>P "+P
 syntax on
 autocmd BufNewFile,BufRead *.ctp set filetype=php
 set list           " 不可視文字の可視化
-set number         " 行番号の表示
+" set number         " 行番号の表示
 set wrap           " 長いテキストの折り返し
 set textwidth=0    " 自動的に改行が入るのを無効化
 " set colorcolumn=80 " その代わり80文字目にラインを入れる
