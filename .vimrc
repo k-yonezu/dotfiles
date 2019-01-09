@@ -507,6 +507,8 @@ endif
 let g:neocomplete#sources#omni#input_patterns.tex = g:vimtex#re#neocomplete
 let g:vimtex_compiler_latexmk = { 'continuous' : 0 }
 let g:vimtex_quickfix_open_on_warning = 0
+"" texのconcealを無効化（#^ω^）
+let g:tex_conceal=''
 "---------- plugin setting end ---------
 
 
