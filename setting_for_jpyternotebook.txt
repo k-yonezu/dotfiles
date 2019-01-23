@@ -1,0 +1,33 @@
+# install pyenv
+brew install pyenv
+
+# setting for zsh
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshenv
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshenv
+echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.zshenv
+
+# install anaconda
+pyenv install anaconda-xxxx(version)
+
+# install jupyter_contrib_nbextensions
+conda install -c conda-forge jupyter_contrib_nbextensions
+jupyter nbextension enable codefolding/main
+
+# install jupyterthemes
+conda install -c conda-forge jupyterthemes
+
+# change theme
+jt -t chesterish -T -f roboto -fs 9 -tf merriserif -tfs 11 -nf ptsans -nfs 11 -dfs 8 -ofs 8
+
+# in ~/.jupyter/custom/custom.css, add this after div.cell.edit_mode
+/* Jupyter cell is in normal mode when code mirror */
+.edit_mode .cell.selected .CodeMirror-focused.cm-fat-cursor {
+background-color: #000000 !important;
+}
+/* Jupyter cell is in insert mode when code mirror */
+.edit_mode .cell.selected .CodeMirror-focused:not(.cm-fat-cursor) {
+background-color: #000000 !important;
+}
+
+# install vim binding
+git clone https://github.com/lambdalisue/jupyter-vim-binding PYENV_ROOT/versions/anacondax-x.x.x/share/jupyter/nbextensions/vim_binding

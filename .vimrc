@@ -571,6 +571,8 @@ if has("autocmd")
   autocmd FileType sass        setlocal sw=4 sts=4 ts=4
   autocmd FileType php         setlocal sw=4 sts=4 ts=4
   autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType asm         setlocal sw=2 sts=2 ts=2
+  autocmd FileType tex         setlocal sw=2 sts=2 ts=2 et
 endif
 
 "----------------------------------------------------------

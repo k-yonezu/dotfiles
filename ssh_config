@@ -1,0 +1,32 @@
+Host coins
+HostName www.coins.tsukuba.ac.jp
+User 
+IdentityFile ~/.ssh/id_rsa
+ServerAliveInterval 300
+TCPKeepAlive yes
+
+Host crocus
+HostName crocus02.coins.tsukuba.ac.jp
+User 
+IdentityFile ~/.ssh/id_rsa
+ServerAliveInterval 300
+TCPKeepAlive yes
+
+Host borage
+HostName borage21.coins.tsukuba.ac.jp
+User 
+IdentityFile ~/.ssh/id_rsa
+ServerAliveInterval 300
+TCPKeepAlive yes
+
+Host pentas
+HostName pentas-compd.coins.tsukuba.ac.jp
+User 
+IdentityFile ~/.ssh/id_rsa
+ServerAliveInterval 300
+TCPKeepAlive yes
+
+Host github.com
+HostName github.com
+IdentityFile ~/.ssh/id_rsa
+User git
