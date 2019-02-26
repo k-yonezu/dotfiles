@@ -620,9 +620,9 @@ vmap <Leader>P "+P
 
 " Swapファイル？Backupファイル？前時代的すぎ
 " なので全て無効化する
-" set nowritebackup
-" set nobackup
-" set noswapfile
+set nowritebackup
+set nobackup
+set noswapfile
 
 "----------------------------------------------------------
 " 表示関係 display setting
@@ -631,7 +631,7 @@ vmap <Leader>P "+P
 syntax on
 autocmd BufNewFile,BufRead *.ctp set filetype=php
 set list           " 不可視文字の可視化
-" set number         " 行番号の表示
+set number         " 行番号の表示
 set wrap           " 長いテキストの折り返し
 set textwidth=0    " 自動的に改行が入るのを無効化
 " set colorcolumn=80 " その代わり80文字目にラインを入れる
@@ -657,6 +657,12 @@ augroup END
 " 行末
 nnoremap H  ^
 nnoremap L  $
+
+" 段落単位での移動
+nnoremap { J
+nnoremap J {
+nnoremap K }
+
 
 " 検索
 nnoremap * *<C-o>

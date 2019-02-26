@@ -26,8 +26,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 # alias
-alias activate="source $PYENV_ROOT/versions/anaconda3-5.2.0/bin/activate"
-alias deactivate="source $PYENV_ROOT/versions/anaconda3-5.2.0/bin/deactivate"
+alias rsync="/usr/local/bin/rsync"
 
 export PATH=/usr/local/bin:$PATH
 
