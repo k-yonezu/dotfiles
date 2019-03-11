@@ -21,21 +21,6 @@ _append_to_path() {
 }
 
 # Customize to your needs...
-# pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-# alias
-alias rsync="/usr/local/bin/rsync"
-
-export PATH=/usr/local/bin:$PATH
-
-# rbenv
-eval "$(rbenv init -)"
-export PATH="$HOME/.rbenv/shims:$PATH"
-
-# local
-export PATH="$HOME/local/bin/:$PATH"
 
 # fzf
 # fzf via Homebrew
@@ -51,16 +36,6 @@ source ~/.fzf/shell/key-bindings.zsh
 source ~/.fzf/shell/completion.zsh
 fi
 
-# fzf + ag configuration
-if _has fzf && _has ag; then
-export FZF_DEFAULT_COMMAND='ag --nocolor -g ""'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='
---color fg:242,hl:65,fg+:15,hl+:108
---color info:108,prompt:109,spinner:108,pointer:168,marker:168
-'
-fi
 
 # tmux
 function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
@@ -124,3 +99,65 @@ function tmux_automatically_attach_session()
     fi
 }
 tmux_automatically_attach_session
+
+## ディレクトリ名だけでcdする。
+setopt auto_cd
+## cdで移動してもpushdと同じようにディレクトリスタックに追加する。
+setopt auto_pushd
+## カレントディレクトリ中に指定されたディレクトリが見つからなかった場合に
+## 移動先を検索するリスト。
+cdpath=(~)
+## ディレクトリが変わったらディレクトリスタックを表示。
+chpwd_functions=($chpwd_functions dirs)
+
+## ヒストリを保存するファイル
+HISTFILE=~/.zsh_history
+## メモリ上のヒストリ数。
+## 大きな数を指定してすべてのヒストリを保存するようにしている。
+HISTSIZE=10000000
+## 保存するヒストリ数
+SAVEHIST=$HISTSIZE
+## ヒストリファイルにコマンドラインだけではなく実行時刻と実行時間も保存する。
+setopt extended_history
+## 同じコマンドラインを連続で実行した場合はヒストリに登録しない。
+setopt hist_ignore_dups
+## スペースで始まるコマンドラインはヒストリに追加しない。
+setopt hist_ignore_space
+## すぐにヒストリファイルに追記する。
+setopt inc_append_history
+## zshプロセス間でヒストリを共有する。
+setopt share_history
+## C-sでのヒストリ検索が潰されてしまうため、出力停止・開始用にC-s/C-qを使わない。
+setopt no_flow_control
+
+## pushd/popdのショートカット。
+alias pd="pushd"
+alias po="popd"
+
+## lsとpsの設定
+### ls: できるだけGNU lsを使う。
+### ps: 自分関連のプロセスのみ表示。
+case $(uname) in
+    *BSD|Darwin)
+        if [ -x "$(which gnuls)" ]; then
+            alias ls="gnuls"
+            alias la="ls -lhAF --color=auto"
+        else
+            alias la="ls -lhAFG"
+        fi
+        alias ps="ps -fU$(whoami)"
+        ;;
+    SunOS)
+        if [ -x "`which gls`" ]; then
+            alias ls="gls"
+            alias la="ls -lhAF --color=auto"
+        else
+            alias la="ls -lhAF"
+        fi
+        alias ps="ps -fl -u$(/usr/xpg4/bin/id -un)"
+        ;;
+    *)
+        alias la="ls -lhAF --color=auto"
+        alias ps="ps -fU$(whoami) --forest"
+        ;;
+esac
