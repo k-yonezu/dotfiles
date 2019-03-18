@@ -248,7 +248,7 @@ let g:indentLine_fileTypeExclude = ['help', 'startify']
 nmap <leader>hj <Plug>GitGutterNextHunk
 nmap <leader>hk <Plug>GitGutterPrevHunk
 " let g:gitgutter_highlight_lines = 1
-set updatetime=250
+set updatetime=300
 " Show gitgutter column always
 set signcolumn=yes
 
@@ -403,8 +403,8 @@ let g:startify_list_order = [
       \ ['☺  ブックマーク:'],
       \ 'bookmarks',
       \ ]
-let g:startify_bookmarks = ["~/.vimrc"]
-let g:startify_custom_indices = ['f', 'g', 'd', 's', 'a', 't', 'r', 'w', 'b', 'v', 'c']
+let g:startify_bookmarks = [{'c': '~/.vimrc'}]
+" let g:startify_custom_indices = ['f', 'g', 'd', 's', 'a', 't', 'r', 'w', 'b', 'v']
 
 " ASCII ARTを真ん中寄せする
 " :h startifyを参照
@@ -631,11 +631,40 @@ set noswapfile
 syntax on
 autocmd BufNewFile,BufRead *.ctp set filetype=php
 set list           " 不可視文字の可視化
-set number         " 行番号の表示
+" set number         " 行番号の表示
 set wrap           " 長いテキストの折り返し
 set textwidth=0    " 自動的に改行が入るのを無効化
 " set colorcolumn=80 " その代わり80文字目にラインを入れる
-set cursorline     " カーソルラインをハイライト
+" set cursorline     " カーソルラインをハイライト
+augroup vimrc-auto-cursorline
+  autocmd!
+  autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
+  autocmd CursorHold,CursorHoldI * call s:auto_cursorline('CursorHold')
+  autocmd WinEnter * call s:auto_cursorline('WinEnter')
+  autocmd WinLeave * call s:auto_cursorline('WinLeave')
+
+  let s:cursorline_lock = 0
+  function! s:auto_cursorline(event)
+    if a:event ==# 'WinEnter'
+      setlocal cursorline
+      let s:cursorline_lock = 2
+    elseif a:event ==# 'WinLeave'
+      setlocal nocursorline
+    elseif a:event ==# 'CursorMoved'
+      if s:cursorline_lock
+        if 1 < s:cursorline_lock
+          let s:cursorline_lock = 1
+        else
+          setlocal nocursorline
+          let s:cursorline_lock = 0
+        endif
+      endif
+    elseif a:event ==# 'CursorHold'
+      setlocal cursorline
+      let s:cursorline_lock = 1
+    endif
+  endfunction
+augroup END
 
 " 前時代的スクリーンベルを無効化
 set t_vb=
@@ -659,9 +688,11 @@ nnoremap H  ^
 nnoremap L  $
 
 " 段落単位での移動
-nnoremap { J
-nnoremap J {
-nnoremap K }
+nnoremap } J
+nnoremap K {
+nnoremap J }
+vnoremap K {
+vnoremap J }
 
 
 " 検索
