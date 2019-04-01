@@ -248,7 +248,7 @@ let g:indentLine_fileTypeExclude = ['help', 'startify']
 nmap <leader>hj <Plug>GitGutterNextHunk
 nmap <leader>hk <Plug>GitGutterPrevHunk
 " let g:gitgutter_highlight_lines = 1
-set updatetime=300
+set updatetime=1000
 " Show gitgutter column always
 set signcolumn=yes
 
@@ -373,9 +373,9 @@ let g:vimfiler_as_default_explorer = 1
 "セーフモードを無効にした状態で起動する
 let g:vimfiler_safe_mode_by_default = 0
 "現在開いているバッファのディレクトリを開く
-nnoremap <silent> <leader>d :<C-u>VimFilerBufferDir -quit<CR>
+nnoremap <silent> <leader>fd :<C-u>VimFilerBufferDir -quit<CR>
 "現在開いているバッファをIDE風に開く
-nnoremap <silent> <leader>tr :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit<CR>
+nnoremap <silent> <leader>ft :<C-u>VimFilerBufferDir -split -simple -winwidth=35 -no-quit<CR>
 
 "デフォルトのキーマッピングを変更
 augroup vimrc
@@ -414,23 +414,25 @@ function! s:filter_header(lines) abort
         \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
   return centered_lines
 endfunction
-let g:startify_custom_header = s:filter_header([
-      \ "        ________ ++     ________ ",
-      \ "       /VVVVVVVV\++++  /VVVVVVVV\ ",
-      \ "       \VVVVVVVV/++++++\VVVVVVVV/ ",
-      \ "        |VVVVVV|++++++++/VVVVV/' ",
-      \ "        |VVVVVV|++++++/VVVVV/' ",
-      \ "       +|VVVVVV|++++/VVVVV/'+ ",
-      \ "     +++|VVVVVV|++/VVVVV/'+++++ ",
-      \ "   +++++|VVVVVV|/VVV___++++++++++ ",
-      \ "     +++|VVVVVVVVVV/##/ +_+_+_+ ",
-      \ "       +|VVVVVVVVV___ +/#_#,#_#, ",
-      \ "        |VVVVVVV//##/+/#/+/#/'/#/ ",
-      \ "        |VVVVV/'+/#/+/#/+/#/ /#/ ",
-      \ "        |VVV/'++/#/+/#/ /#/ /#/ ",
-      \ "        'V/'  /##//##//##//###/ ",
-      \ "                 ++ ",
-      \ ])
+let g:startify_custom_header = s:filter_header(startify#fortune#cowsay())
+" let g:startify_custom_header = s:filter_header(startify#fortune#cowsay('', '═','║','╔','╗','╝','╚'))
+" let g:startify_custom_header = s:filter_header([
+"       \ "        ________ ++     ________ ",
+"       \ "       /VVVVVVVV\++++  /VVVVVVVV\ ",
+"       \ "       \VVVVVVVV/++++++\VVVVVVVV/ ",
+"       \ "        |VVVVVV|++++++++/VVVVV/' ",
+"       \ "        |VVVVVV|++++++/VVVVV/' ",
+"       \ "       +|VVVVVV|++++/VVVVV/'+ ",
+"       \ "     +++|VVVVVV|++/VVVVV/'+++++ ",
+"       \ "   +++++|VVVVVV|/VVV___++++++++++ ",
+"       \ "     +++|VVVVVVVVVV/##/ +_+_+_+ ",
+"       \ "       +|VVVVVVVVV___ +/#_#,#_#, ",
+"       \ "        |VVVVVVV//##/+/#/+/#/'/#/ ",
+"       \ "        |VVVVV/'+/#/+/#/+/#/ /#/ ",
+"       \ "        |VVV/'++/#/+/#/ /#/ /#/ ",
+"       \ "        'V/'  /##//##//##//###/ ",
+"       \ "                 ++ ",
+"       \ ])
 
 "----------------------------------------------------------
 " multiple-cursors
@@ -458,15 +460,15 @@ let g:better_whitespace_filetypes_blacklist=['startify', 'vimfiler']
 
 nnoremap <leader>b :Buffers<CR>
 nnoremap <leader>c :Commands<CR>
-nnoremap <leader>f :Files<CR>
+nnoremap <leader>ff :Files<CR>
 nnoremap <leader>a :Ag<CR>
-nnoremap <leader>x :bd<CR>
+nnoremap <leader>bx :bd<CR>
 command! FZFMru call fzf#run({
       \  'source':  v:oldfiles,
       \  'sink':    'e',
       \  'options': '-m -x +s',
       \  'down':    '40%'})
-nnoremap <Space>r :FZFMru<CR>
+nnoremap <leader>fr :FZFMru<CR>
 
 " " Mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
@@ -684,15 +686,18 @@ augroup END
 " マクロおよびキー設定 keymap
 "----------------------------------------------------------
 " 行末
-nnoremap H  ^
-nnoremap L  $
+nnoremap H ^
+vnoremap H ^
+nnoremap L $
+vnoremap L $h
 
 " 段落単位での移動
 nnoremap } J
-nnoremap K {
-nnoremap J }
-vnoremap K {
-vnoremap J }
+
+nnoremap K 10k
+nnoremap J 10j
+vnoremap K 10k
+vnoremap J 10j
 
 
 " 検索
@@ -742,7 +747,8 @@ nnoremap Q gq
 set backspace=indent,eol,start
 
 " jjでエスケープ
-inoremap <silent> jj <ESC>
+" inoremap <silent> jj <ESC>
+inoremap <silent> fd <ESC>
 
 " 日本語入力で”っj”と入力してもEnterキーで確定させればインサートモードを抜ける
 inoremap <silent> っj <ESC>
@@ -856,10 +862,10 @@ endif
 
 "画面分割
 nnoremap s <Nop>
-nnoremap sj <C-w>j
-nnoremap sk <C-w>k
-nnoremap sl <C-w>l
-nnoremap sh <C-w>h
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>wl <C-w>l
+nnoremap <leader>wh <C-w>h
 nnoremap sJ <C-w>J
 nnoremap sK <C-w>K
 nnoremap sL <C-w>L
