@@ -31,11 +31,13 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     sql
+     ruby
+     markdown
      python
      html
      vimscript
      php
-     fzf
      javascript
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -44,11 +46,16 @@ values."
      ;; ----------------------------------------------------------------
      helm
      auto-completion
-     ;; better-defaults
+     better-defaults
      emacs-lisp
      git
-     ;; markdown
-     ;; org
+     markdown
+     org
+     (org :variables
+          ;; org-projectile-file "TODOs.org"
+          org-enable-github-support t
+          org-enable-reveal-js-support t
+          )
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
@@ -59,12 +66,19 @@ values."
                       version-control-diff-tool 'diff-hl
                       version-control-diff-side 'left
                       version-control-global-margin t)
+     games
+     search-engine
+     pdf-tools
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(
+                                      fzf
+                                      yasnippet-snippets
+                                      org-projectile
+                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -307,19 +321,19 @@ values."
   "Initialization function for user code.
 It is called immediately after `dotspacemacs/init', before layer configuration
 executes.
- This function is mostly useful for variables that need to be set
-before packages are loaded. If you are unsure, you should try in setting them in
+ this function is mostly useful for variables that need to be set
+before packages are loaded. if you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
   (setq spacemacs-evil-cursors '(("normal" "chartreuse3" box)
-                                 ("insert" "SkyBlue2" (bar . 2))
-                                 ("emacs" "SkyBlue2" box)
-                                 ("hybrid" "DarkGoldenrod2" box)
+                                 ("insert" "skyblue" (bar . 2))
+                                 ("emacs" "skyblue2" box)
+                                 ("hybrid" "darkgoldenrod2" box)
                                  ("replace" "chocolate" (hbar . 2))
-                                 ("evilified" "LightGoldenrod3" box)
-                                 ("visual" "gray" (hbar . 2))
+                                 ("evilified" "lightgoldenrod3" box)
+                                 ("visual" "orange" (hbar . 2))
                                  ("motion" "plum3" box)
-                                 ("lisp" "HotPink1" box)
+                                 ("lisp" "hotpink1" box)
                                  ("iedit" "firebrick1" box)
                                  ("iedit-insert" "firebrick1" (bar . 2))))
 
@@ -335,6 +349,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
   ;; Magit(Gitクライアント)をフルスクリーンで表示する
   ;; https://github.com/syl20bnr/spacemacs/tree/master/layers/%2Bsource-control/git#magit-status-fullscreen
   (setq-default git-magit-status-fullscreen t)
+
 
   )
 
@@ -374,6 +389,7 @@ you should place your code here."
                             (setq indent-tabs-mode nil)))
 
   ;; php mode
+  (setq php-mode-force-pear t)
   (add-hook 'php-mode-hook (lambda ()
                              (setq c-basic-offset 4)
                              (setq tab-width 4)
@@ -388,9 +404,10 @@ you should place your code here."
   (add-to-list 'auto-mode-alist '("\\.ctp\\'"   . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-hook 'web-mode-hook (lambda ()
-                             (setq tab-width 4)
                              (setq indent-tabs-mode t)
+                             (setq web-mode-markup-indent-offset 2)
                              (setq web-mode-css-indent-offset 2)
+                             (setq web-mode-code-indent-offset 2)
                              (setq web-mode-engines-alist
                                    '(("php"    . "\\.ctp\\'"))
                                    )
@@ -460,13 +477,161 @@ you should place your code here."
                                 'evil-escape-mode))))
 
   ;; helm
-  ;; (setq dumb-jump-mode t)
+  (setq dumb-jump-mode t)
   (setq dumb-jump-force-searcher 'ag)
   (setf dumb-jump-selector 'helm)
 
   ;; dumb-jump
   (global-set-key (kbd "C-M-w") 'dumb-jump-go-other-window)
 
+  ;; fzf
+  (setq projectile-switch-project-action 'helm-fzf-project-root)
+  (spacemacs/set-leader-keys "off" 'helm-fzf-project-root)
+
+  ;; fzf helm
+  (require 'helm)
+  (require 'helm-files)
+  (require 's)
+  (require 'dash)
+
+  (defcustom helm-fzf-executable "fzf"
+    "Default executable for fzf"
+    :type 'stringp
+    :group 'helm-fzf)
+
+  (defun helm-fzf--project-root ()
+    (cl-loop for dir in '(".git/" ".hg/" ".svn/" ".git")
+             when (locate-dominating-file default-directory dir)
+             return it))
+
+  (defvar helm-fzf-source
+    (helm-build-async-source "fzf"
+      :candidates-process 'helm-fzf--do-candidate-process
+      :filter-one-by-one 'identity
+      :requires-pattern 3
+      :action 'helm-find-file-or-marked
+      :candidate-number-limit 9999))
+
+  (defun helm-fzf--do-candidate-process ()
+    (let* ((cmd-args (-filter 'identity (list helm-fzf-executable
+                                              "--no-sort"
+                                              "-f"
+                                              helm-pattern)))
+           (proc (apply 'start-file-process "helm-fzf" helm-buffer cmd-args)))
+      (prog1 proc
+        (set-process-sentinel
+         (get-buffer-process helm-buffer)
+         #'(lambda (process event)
+             (helm-process-deferred-sentinel-hook
+              process event (helm-default-directory)))))))
+
+  ;; autoload
+  (defun helm-fzf (directory)
+    (interactive "D")
+    (let ((default-directory directory))
+      (helm :sources '(helm-fzf-source)
+            :buffer "*helm-fzf*")))
+
+  (defun helm-fzf-project-root ()
+    (interactive)
+    (let ((default-directory (helm-fzf--project-root)))
+      (unless default-directory
+        (error "Could not find the project root."))
+      (helm :sources '(helm-fzf-source)
+            :buffer "*helm-fzf*")))
+
+  (provide 'helm-fzf)
+
+  ;; helm-fzf.el ends here
+
+  ;; my function
+  (defun toggle-camelcase-underscores ()
+    "Toggle between camelcase and underscore notation for the symbol at point."
+    (interactive)
+    (save-excursion
+      (let* ((bounds (bounds-of-thing-at-point 'symbol))
+             (start (car bounds))
+             (end (cdr bounds))
+             (currently-using-underscores-p (progn (goto-char start)
+                                                   (re-search-forward "_" end t))))
+        (if currently-using-underscores-p
+            (progn
+              (upcase-initials-region start end)
+              (replace-string "_" "" nil start end)
+              (downcase-region start (1+ start)))
+          (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
+          (downcase-region start (cdr (bounds-of-thing-at-point 'symbol)))))))
+
+  (defun php-class-validation-from-string()
+    (interactive)
+    (let ((str (buffer-substring-no-properties (point-at-bol) (point-at-eol))))
+      (insert (concat "$this->validate['" str "'] = $this->__ValidationRule->get" (s-upper-camel-case str) "ValidationRule();" "\n"))
+      (kill-line)))
+
+  (defun php-class-getter-function-from-string (str)
+    (concat "public function get" (s-upper-camel-case str) "(){" "\n"
+            "	return isset($this->" str ") ? $this->" str ": false;\n"
+            "}" "\n"))
+
+  (defun php-class-setter-function-from-string (str)
+    (concat "public function set" (s-upper-camel-case str) "($val){" "\n"
+            "	$this->" str " = $val;" "\n"
+            "	return $this;" "\n"
+            "}" "\n"))
+
+  (defun php-class-function-from-string ()
+    (interactive)
+    (let ((str (buffer-substring-no-properties (point-at-bol) (point-at-eol))))
+      (delete-region (point-at-bol) (point-at-eol))
+      (insert (php-class-getter-function-from-string str))
+      (insert (php-class-setter-function-from-string str))
+      (kill-line)))
+
+  ;; org
+  (setq org-capture-templates
+        '(("t" "Todo" entry (file "~/org/todo.org")
+           "* TODO %?\n    %i\n   %a\n    %T")
+          ("n" "note" entry (file "~/org/note.org")
+           "* %?\n   %a\n    %T")
+          ("c" "Code" entry (file "~/org/code.org")
+           "* %?\n   %a\n    %T\n    %F")
+          ("m" "memo" entry (file+headline "~/org/memo.org" "Memo")
+           "* %?\nEntered on %T\n")
+          ))
+
+  (defun show-org-buffer (file)
+    "Show an org-file FILE on the current buffer."
+    (interactive)
+    (if (get-buffer file)
+        (let ((buffer (get-buffer file)))
+          (switch-to-buffer buffer)
+          (message "%s" file))
+      (find-file (concat "~/org/" file))))
+  (spacemacs/set-leader-keys "aov" '(lambda () (interactive) (show-org-buffer "memo.org")))
+
+  ;; (with-eval-after-load 'org-agenda
+  ;;   (require 'org-projectile)
+  ;;   (push (org-projectile:todo-files) org-agenda-files))
+
+  (setq org-bullets-bullet-list '("■" "◆" "▲" "▶"))
+
+  ;; reveal
+  (setq org-reveal-root "file:///Users/yoneichi/org/reveal.js")
+
+
+
+  ;; java
+  (setq
+   eclim-eclipse-dirs '("/Applications/Eclipse\\ Java.app/Contents/Eclipse")
+   eclim-executable "/Applications/Eclipse\\ Java.app/Contents/Eclipse/plugins/org.eclim_2.8.0/bin/eclim"
+   ;; Use another eclimd executable
+   eclimd-executable "/Applications/Eclipse\\ Java.app/Contents/Eclipse/eclimd"
+   ;; Specify the workspace to use by default
+   eclimd-default-workspace "~/workspace/pentas/eclipse/"
+   ;; Whether or not to block emacs until eclimd is ready
+   eclimd-wait-for-process t)
+
+  
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -477,7 +642,8 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data vimrc-mode dactyl-mode xterm-color smeargle shell-pop orgit multi-term magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode helm-company helm-c-yasnippet fzf fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode helm-ext ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async)))
+   (quote
+    (reveal-in-osx-finder ox-reveal company-emacs-eclim eclim pdf-tools tablist lv ox-gfm sql-indent engine-mode typit mmt sudoku pacmacs 2048-game yasnippet-snippets org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot unfill mwim rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby mmm-mode markdown-toc markdown-mode gh-md git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data vimrc-mode dactyl-mode xterm-color smeargle shell-pop orgit multi-term magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode helm-company helm-c-yasnippet fzf fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode helm-ext ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
