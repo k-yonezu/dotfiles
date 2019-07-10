@@ -605,6 +605,43 @@ you should place your code here."
   ;; japanese
   (setenv "LANG" "ja_JP.UTF-8")
 
+  ;; align
+  (if (not (fboundp 'defun-if-undefined))
+      (defmacro defun-if-undefined (name &rest rest)
+        `(unless (fboundp (quote ,name))
+           (defun ,name ,@rest))))
+
+  (defun-if-undefined inside-string-or-comment-p ()
+    (let ((state (parse-partial-sexp (point-min) (point))))
+      (or (nth 3 state) (nth 4 state))))
+
+  (defun-if-undefined re-search-forward-without-string-and-comments (&rest args)
+    (let ((value (apply #'re-search-forward args)))
+      (if (and value (inside-string-or-comment-p))
+          (apply #'re-search-forward-without-string-and-comments args)
+        value)))
+
+  (defun my-buffer-indent-tabs-code-p (&optional buffer)
+    "Check first indent char."
+    (let ((buffer (or buffer (current-buffer))))
+      (with-current-buffer buffer
+        (save-excursion
+          (save-restriction
+            (widen)
+            (goto-char (point-min))
+            (and (re-search-forward-without-string-and-comments "^[ \t]"
+                                                                (point-max) t)
+                 (string= (match-string 0) "\t")))))))
+
+  (defun my-set-indent-tabs-mode ()
+    (setq indent-tabs-mode (my-buffer-indent-tabs-code-p)))
+
+  (defadvice align-regexp (around advise-align-regexp activate)
+    "Let align-regexp indent by spaces."
+    (when indent-tabs-mode (setq indent-tabs-mode nil))
+    ad-do-it
+    (my-set-indent-tabs-mode))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
