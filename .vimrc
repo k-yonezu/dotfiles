@@ -506,7 +506,9 @@ nnoremap <leader>g :ProseMode<CR>
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
-let g:neocomplete#sources#omni#input_patterns.tex = g:vimtex#re#neocomplete
+if exists('g:vimtex#re#neocomplete')
+  let g:neocomplete#sources#omni#input_patterns.tex = g:vimtex#re#neocomplete
+endif
 let g:vimtex_compiler_latexmk = { 'continuous' : 0 }
 let g:vimtex_quickfix_open_on_warning = 0
 "" texのconcealを無効化（#^ω^）
@@ -719,9 +721,9 @@ vnoremap < <gv
 " endfunction
 
 " ファイル保存
-nnoremap <leader>w  :<C-u>w<CR>
-nnoremap <leader>q  :<C-u>q<CR>
-nnoremap <leader>Q  :<C-u>q!<CR>
+nnoremap <leader>fs  :<C-u>w<CR>
+nnoremap <leader>qq  :<C-u>q<CR>
+nnoremap <leader>QQ  :<C-u>q!<CR>
 
 " 空行の挿入
 nnoremap <silent><leader>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
