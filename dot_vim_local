@@ -1,0 +1,470 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@k-yonezu 
+0
+00yonezu-qwt/dotfiles
+ Code Issues 0 Pull requests 0 Projects 0 Wiki Security Insights
+dotfiles/dot_vimrc_local
+@yonezu-qwt yonezu-qwt add esc vimrc
+97c7938 on 5 Jul
+442 lines (377 sloc)  14.4 KB
+  
+set encoding=utf-8
+scriptencoding utf-8
+" ↑1行目は読み込み時の文字コードの設定
+" ↑2行目はVim Script内でマルチバイトを使う場合の設定
+" Vim scritptにvimrcも含まれるので、日本語でコメントを書く場合は先頭にこの設定が必要になる
+"
+" release autogroup in MyAutoCmd
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
+" ノーマルモード時だけ ; と : を入れ替える
+nnoremap ;  :
+nnoremap :  ;
+vnoremap ;  :
+vnoremap :  ;
+
+
+" --------- vim setting --------
+"----------------------------------------------------------
+" 文字
+"----------------------------------------------------------
+set fileencoding=utf-8 " 保存時の文字コード
+set fileencodings=ucs-boms,utf-8,euc-jp,cp932 " 読み込み時の文字コードの自動判別. 左側が優先される
+set fileformats=unix,dos,mac " 改行コードの自動判別. 左側が優先される
+set ambiwidth=double " □や○文字が崩れる問題を解決
+
+"----------------------------------------------------------
+" ステータスライン
+"----------------------------------------------------------
+set laststatus=2 " ステータスラインを常に表示
+set showmode " 現在のモードを表示
+set showcmd " 打ったコマンドをステータスラインの下に表示
+set ruler " ステータスラインの右側にカーソルの位置を表示する
+
+"----------------------------------------------------------
+" コマンドモード
+"----------------------------------------------------------
+set wildmenu " コマンドモードの補完
+set history=5000 " 保存するコマンド履歴の数
+
+"----------------------------------------------------------
+" タブ・インデント
+"----------------------------------------------------------
+"""""""""""""""""""""""""
+"      インデント
+""""""""""""""""""""""""
+set autoindent          "改行時に前の行のインデントを計測
+set smartindent         "改行時に入力された行の末尾に合わせて次の行のインデントを増減する
+set cindent             "Cプログラムファイルの自動インデントを始める
+set smarttab            "新しい行を作った時に高度な自動インデントを行う
+set noexpandtab         " タブをタブとして扱う(スペースに展開しない)
+
+set tabstop=4           "タブを含むファイルを開いた際, タブを何文字の空白に変換するか
+set shiftwidth=4        "自動インデントで入る空白数
+" set softtabstop=0       "キーボードから入るタブの数
+
+if has("autocmd")
+  "ファイルタイプの検索を有効にする
+  filetype plugin on
+  "ファイルタイプに合わせたインデントを利用
+  filetype indent on
+  "sw=softtabstop, sts=shiftwidth, ts=tabstop, et=expandtabの略
+  autocmd FileType c           setlocal sw=4 sts=4 ts=4
+  autocmd FileType ruby        setlocal sw=2 sts=2 ts=2
+  autocmd FileType javascript  setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType zsh         setlocal sw=4 sts=4 ts=4
+  autocmd FileType python      setlocal sw=4 sts=4 ts=4 et
+  autocmd FileType scala       setlocal sw=4 sts=4 ts=4
+  autocmd FileType json        setlocal sw=4 sts=4 ts=4
+  autocmd FileType html        setlocal sw=4 sts=4 ts=4
+  autocmd FileType css         setlocal sw=2 sts=2 ts=2
+  autocmd FileType scss        setlocal sw=2 sts=2 ts=2
+  autocmd FileType sass        setlocal sw=4 sts=4 ts=4
+  autocmd FileType php         setlocal sw=4 sts=4 ts=4
+  autocmd FileType vim         setlocal sw=2 sts=2 ts=2 et
+  autocmd FileType asm         setlocal sw=2 sts=2 ts=2
+  autocmd FileType tex         setlocal sw=2 sts=2 ts=2 et
+endif
+
+"----------------------------------------------------------
+" 文字列検索
+"----------------------------------------------------------
+set incsearch  " インクリメンタルサーチ. １文字入力毎に検索を行う
+set ignorecase " 検索パターンに大文字小文字を区別しない
+set smartcase  " 検索パターンに大文字を含んでいたら大文字小文字を区別する
+set hlsearch   " 検索結果をハイライト
+
+" バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+
+" ESCキー2度押しでハイライトの切り替え
+nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
+" ESCを二回押すことでハイライトを消す
+" nmap <silent> <Esc><Esc> :nohlsearch<CR>
+
+"----------------------------------------------------------
+" 編集関係 edit setting
+"----------------------------------------------------------
+set shiftround          " '<'や'>'でインデントする際に'shiftwidth'の倍数に丸める
+set infercase           " 補完時に大文字小文字を区別しない
+set hidden              " バッファを閉じる代わりに隠す（Undo履歴を残すため）
+set switchbuf=useopen   " 新しく開く代わりにすでに開いてあるバッファを開く
+set showmatch           " 対応する括弧などをハイライト表示する
+set matchtime=3         " 対応括弧のハイライト表示を3秒にする
+
+" 対応括弧に'<'と'>'のペアを追加
+set matchpairs& matchpairs+=<:>
+
+source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する
+
+" バックスペースでなんでも消せるようにする
+set backspace=indent,eol,start
+
+" クリップボードにコピー
+vmap <Leader>y "+y
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+vmap <Leader>P "+P
+
+" Swapファイル？Backupファイル？前時代的すぎ
+" なので全て無効化する
+set nowritebackup
+set nobackup
+set noswapfile
+
+"----------------------------------------------------------
+" 表示関係 display setting
+"----------------------------------------------------------
+"色付け
+syntax on
+autocmd BufNewFile,BufRead *.ctp set filetype=php
+set list           " 不可視文字の可視化
+" set number         " 行番号の表示
+set wrap           " 長いテキストの折り返し
+set textwidth=0    " 自動的に改行が入るのを無効化
+" set colorcolumn=80 " その代わり80文字目にラインを入れる
+" set cursorline     " カーソルラインをハイライト
+augroup vimrc-auto-cursorline
+  autocmd!
+  autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
+  autocmd CursorHold,CursorHoldI * call s:auto_cursorline('CursorHold')
+  autocmd WinEnter * call s:auto_cursorline('WinEnter')
+  autocmd WinLeave * call s:auto_cursorline('WinLeave')
+
+  let s:cursorline_lock = 0
+  function! s:auto_cursorline(event)
+    if a:event ==# 'WinEnter'
+      setlocal cursorline
+      let s:cursorline_lock = 2
+    elseif a:event ==# 'WinLeave'
+      setlocal nocursorline
+    elseif a:event ==# 'CursorMoved'
+      if s:cursorline_lock
+        if 1 < s:cursorline_lock
+          let s:cursorline_lock = 1
+        else
+          setlocal nocursorline
+          let s:cursorline_lock = 0
+        endif
+      endif
+    elseif a:event ==# 'CursorHold'
+      setlocal cursorline
+      let s:cursorline_lock = 1
+    endif
+  endfunction
+augroup END
+
+" 前時代的スクリーンベルを無効化
+set t_vb=
+set novisualbell
+
+" デフォルト不可視文字は美しくないのでUnicodeで綺麗に
+" set listchars=tab:\»\ ,trail:-,extends:»,precedes:«,nbsp:%,eol:↲
+set listchars=tab:\»\ ,extends:»,precedes:«,nbsp:%
+" tab
+augroup set-tab-highlight
+  autocmd!
+  " autocmd ColorScheme,GUIEnter * highlight SpecialKey guifg=None guibg=None
+  " autocmd ColorScheme,VimEnter * highlight SpecialKey ctermfg=None ctermbg=None
+augroup END
+
+"----------------------------------------------------------
+" マクロおよびキー設定 keymap
+"----------------------------------------------------------
+" 行末
+nnoremap H ^
+vnoremap H ^
+nnoremap L $
+vnoremap L $h
+
+" 段落単位での移動
+nnoremap } J
+
+nnoremap K 10k
+nnoremap J 10j
+vnoremap K 10k
+vnoremap J 10j
+
+
+" 検索
+nnoremap * *<C-o>
+nnoremap g* g*<C-o>
+
+" インデント
+vnoremap > >gv
+vnoremap < <gv
+
+" 向きがそろえる
+" nnoremap <expr> n <SID>search_forward_p() ? 'nzv' : 'Nzv'
+" nnoremap <expr> N <SID>search_forward_p() ? 'Nzv' : 'nzv'
+" vnoremap <expr> n <SID>search_forward_p() ? 'nzv' : 'Nzv'
+" vnoremap <expr> N <SID>search_forward_p() ? 'Nzv' : 'nzv'
+"
+" function! s:search_forward_p()
+"   return exists('v:searchforward') ? v:searchforward : 1
+" endfunction
+
+" ファイル保存
+nnoremap <leader>fs  :<C-u>w<CR>
+nnoremap <leader>q  :<C-u>q<CR>
+nnoremap <leader>Q  :<C-u>q!<CR>
+
+" 空行の挿入
+nnoremap <silent><leader>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
+nnoremap <silent><leader>O  :<C-u>for i in range(v:count1) \| call append(line('.')-1, '') \| endfor<CR>
+
+" ペースト
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+" タブ
+nnoremap <silent> tt  :<C-u>tabe<CR>
+nnoremap <C-h>  gT
+nnoremap <C-l>  gt
+
+" 危険なキー
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+
+nnoremap Q gq
+
+" バックスペースキーの有効化
+set backspace=indent,eol,start
+
+" jjでエスケープ
+" inoremap <silent> jj <ESC>
+inoremap <silent> fd <ESC>
+
+" 日本語入力で”っj”と入力してもEnterキーで確定させればインサートモードを抜ける
+inoremap <silent> っj <ESC>
+
+" 日本語入力がオンのままでも使えるコマンド(Enterキーは必要)
+nnoremap あ a
+nnoremap い i
+nnoremap う u
+nnoremap お o
+nnoremap っd dd
+nnoremap っy yy
+
+" 置換
+nnoremap gs  :<C-u>%s///g<Left><Left><Left>
+vnoremap gs  :s///g<Left><Left><Left>
+
+" コマンドライン emacsライク
+cnoremap <C-f>  <Right>
+cnoremap <C-b>  <Left>
+cnoremap <C-a>  <C-b>
+cnoremap <C-e>  <C-e>
+cnoremap <C-u> <C-e><C-u>
+cnoremap <C-v> <C-f>a
+
+" text
+onoremap aa  a>
+onoremap ia  i>
+onoremap ar  a]
+onoremap ir  i]
+onoremap ad  a"
+onoremap id  i"
+
+set whichwrap=b,s,h,l,<,>,[,],~ " カーソルの左右移動で行末から次の行の行頭への移動が可能になる
+
+" 行が折り返し表示されていた場合、行単位ではなく表示行単位でカーソルを移動する
+nnoremap k   gk
+nnoremap j   gj
+vnoremap k   gk
+vnoremap j   gj
+nnoremap gk  k
+nnoremap gj  j
+vnoremap gk  k
+vnoremap gj  j
+
+" カーソル下の単語を * で検索
+vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
+
+" 検索後にジャンプした際に検索単語を画面中央に持ってくる
+" nnoremap n nzz
+" nnoremap N Nzz
+" nnoremap * *zz
+" nnoremap # #zz
+" nnoremap g* g*zz
+" nnoremap g# g#zz
+
+" vを二回で行末まで選択
+vnoremap v $h
+
+" TABにて対応ペアにジャンプ
+nnoremap <Tab> %
+vnoremap <Tab> %
+
+" Shift + 矢印でウィンドウサイズを変更
+nnoremap <S-Left>  <C-w><<CR>
+nnoremap <S-Right> <C-w>><CR>
+nnoremap <S-Up>    <C-w>-<CR>
+nnoremap <S-Down>  <C-w>+<CR>
+
+" T + ? で各種設定をトグル
+nnoremap [toggle] <Nop>
+nmap T [toggle]
+nnoremap <silent> [toggle]s :setl spell!<CR>:setl spell?<CR>
+nnoremap <silent> [toggle]l :setl list!<CR>:setl list?<CR>
+nnoremap <silent> [toggle]t :setl expandtab!<CR>:setl expandtab?<CR>
+nnoremap <silent> [toggle]w :setl wrap!<CR>:setl wrap?<CR>
+
+" make, grep などのコマンド後に自動的にQuickFixを開く
+autocmd MyAutoCmd QuickfixCmdPost make,grep,grepadd,vimgrep copen
+
+" QuickFixおよびHelpでは q でバッファを閉じる
+autocmd MyAutoCmd FileType help,qf nnoremap <buffer> q <C-w>c
+
+" :e などでファイルを開く際にフォルダが存在しない場合は自動作成
+function! s:mkdir(dir, force)
+  if !isdirectory(a:dir) && (a:force ||
+        \ input(printf('"%s" does not exist. Create? [y/N]', a:dir)) =~? '^y\%[es]$')
+    call mkdir(iconv(a:dir, &encoding, &termencoding), 'p')
+  endif
+endfunction
+autocmd MyAutoCmd BufWritePre * call s:mkdir(expand('<afile>:p:h'), v:cmdbang)
+
+" vim 起動時のみカレントディレクトリを開いたファイルの親ディレクトリに指定
+autocmd MyAutoCmd VimEnter * call s:ChangeCurrentDir('', '')
+function! s:ChangeCurrentDir(directory, bang)
+  if a:directory == ''
+    lcd %:p:h
+  else
+    execute 'lcd' . a:directory
+  endif
+
+  if a:bang == ''
+    pwd
+  endif
+endfunction
+
+" ~/.vimrc.localが存在する場合のみ設定を読み込む
+let s:local_vimrc = expand('~/.vimrc.local')
+if filereadable(s:local_vimrc)
+  execute 'source ' . s:local_vimrc
+endif
+
+"画面分割
+nnoremap s <Nop>
+nnoremap <leader>wj <C-w>j
+nnoremap <leader>wk <C-w>k
+nnoremap <leader>wl <C-w>l
+nnoremap <leader>wh <C-w>h
+nnoremap <leader>wv :<C-u>vs<CR>
+nnoremap <leader>ws :<C-u>sp<CR>
+nnoremap sJ <C-w>J
+nnoremap sK <C-w>K
+nnoremap sL <C-w>L
+nnoremap sH <C-w>H
+nnoremap sr <C-w>r
+nnoremap s= <C-w>=
+nnoremap sw <C-w>w
+nnoremap so <C-w>_<C-w>|
+nnoremap sO <C-w>=
+nnoremap sN :<C-u>bn<CR>
+nnoremap sP :<C-u>bp<CR>
+nnoremap st :<C-u>tabnew<CR>
+nnoremap sT :<C-u>Unite tab<CR>
+nnoremap sq :<C-u>q<CR>
+nnoremap sQ :<C-u>bd<CR>
+nnoremap sb :<C-u>Unite buffer_tab -buffer-name=file<CR>
+nnoremap sB :<C-u>Unite buffer -buffer-name=file<CR>
+
+"call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+"call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+"call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+"call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+"call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+"call submode#map('bufmove', 'n', '', '<', '<C-w><')
+"call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+"call submode#map('bufmove', 'n', '', '-', '<C-w>-')
+
+"----------------------------------------------------------
+" マウスでカーソル移動とスクロール
+"----------------------------------------------------------
+" if has('mouse')
+" 	set mouse=a
+" 	if has('mouse_sgr')
+" 		set ttymouse=sgr
+" 	elseif v:version > 703 || v:version is 703 && has('patch632')
+" 		set ttymouse=sgr
+" 	else
+" 		set ttymouse=xterm2
+" 	endif
+" endif
+
+"----------------------------------------------------------
+" クリップボードからのペースト
+"----------------------------------------------------------
+" 挿入モードでクリップボードからペーストする時に自動でインデントさせないようにする
+if &term =~ "xterm"
+  let &t_SI .= "\e[?2004h"
+  let &t_EI .= "\e[?2004l"
+  let &pastetoggle = "\e[201~"
+
+  function XTermPasteBegin(ret)
+    set paste
+    return a:ret
+  endfunction
+
+  inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+endif
+
+" clipboard
+set clipboard=unnamed,autoselect
+
+"html閉じタグ自動補完
+augroup MyXML
+  autocmd!
+  autocmd Filetype xml inoremap <buffer> </ </<C-x><C-o>
+  autocmd Filetype html inoremap <buffer> </ </<C-x><C-o>
+augroup END
+
+" --------- vim setting end--------
+© 2019 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+
