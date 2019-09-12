@@ -37,6 +37,10 @@ else
     alias lv="$PAGER"
 fi
 
+# my func
+_has() {
+  return $( whence $1 >/dev/null )
+}
 #
 # Language
 #
