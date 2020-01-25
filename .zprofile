@@ -77,6 +77,7 @@ typeset -gU cdpath fpath mailpath path
 path=(
 # 自分用
 $HOME/local/bin(N-/)
+$HOME/.nodebrew/current/bin(N-/)
 # システム用
 /usr/local/bin(N-/)
 /usr/local/sbin(N-/)
