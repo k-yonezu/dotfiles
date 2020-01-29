@@ -78,7 +78,7 @@ values."
      ipython-notebook
      fzf
      java
-     ;; japanese
+     japanese
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -670,8 +670,6 @@ you should place your code here."
   (add-hook 'python-mode-hook '(lambda ()
                                  (jedi:setup)
                                  (setq flycheck-checker 'python-pylint)))
-
-
 
   )
 
