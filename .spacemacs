@@ -47,7 +47,9 @@ values."
      ;; ----------------------------------------------------------------
      helm
      auto-completion
-     (latex :variables latex-build-command "LatexMk")
+     (latex :variables
+            latex-build-command "LatexMk"
+            latex-enable-auto-fill t)
      better-defaults
      emacs-lisp
      git
@@ -69,7 +71,8 @@ values."
              python-sort-imports-on-save t)
      version-control
      (version-control :variables
-                      version-control-diff-tool 'diff-hl
+                      ;; version-control-diff-tool 'diff-hl
+                      version-control-diff-tool 'git-gutter
                       version-control-diff-side 'left
                       version-control-global-margin t)
      games
@@ -94,7 +97,11 @@ values."
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(
+                                    git-gutter+
+                                    git-gutter-fringe
+                                    git-gutter-fringe+
+                                    )
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and uninstall any
@@ -648,28 +655,41 @@ you should place your code here."
 
   ;; latex
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  (add-hook 'latex-mode-hook '(lambda ()
-                                (setq auto-fill-mode nil)))
+  (add-hook 'LaTeX-mode-hook
+            (function (lambda ()
+                        (add-to-list 'TeX-command-list
+                                    '("LatexMk" ; ここの名前を変更
+                                      "latexmk -pvc %t"
+                                      TeX-run-TeX nil (latex-mode) :help "Run Latexmk")))))
 
   ;; org-re-reveal
   (use-package org-re-reveal :after org)
 
-  ;; write mode
+  ;; ;; write mode
   (require 'writeroom-mode)
   ;; 有効にするメジャーモード
   (setq writeroom-major-modes '(text-mode org-mode))
   ;; 横幅を80桁に設定
-  ;; (setq writeroom-width 80)
+  (setq writeroom-width 80)
   ;; ;; 上のマージンを100に設定
   ;; (setq writeroom-border-width 100)
   ;; ;; その際以下の設定が必要
   ;; (push 'writeroom-toggle-internal-border-width
   ;;       writeroom-global-effects)
+  (setq writeroom-toggle-mode-line t)
 
  ;; python-modeでjediによる自動補完
   (add-hook 'python-mode-hook '(lambda ()
                                  (jedi:setup)
                                  (setq flycheck-checker 'python-pylint)))
+
+  ;; git-gutter
+  (setq git-gutter:added-sign "|")
+  (setq git-gutter:deleted-sign "|")
+  (setq git-gutter:modified-sign "|")
+  (set-face-foreground 'git-gutter:added  "green")
+  (set-face-foreground 'git-gutter:deleted  "red")
+  (set-face-foreground 'git-gutter:modified "DeepSkyBlue")
 
   )
 
@@ -682,7 +702,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (jedi jedi-core python-environment epc ctable concurrent visual-fill-column writeroom-mode org-re-reveal csv-mode company-auctex auctex-latexmk auctex pangu-spacing japanese-holidays evil-tutor-ja ddskk cdb ccc avy-migemo migemo ein polymode deferred websocket reveal-in-osx-finder ox-reveal company-emacs-eclim eclim pdf-tools tablist lv ox-gfm sql-indent engine-mode typit mmt sudoku pacmacs 2048-game yasnippet-snippets org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot unfill mwim rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby mmm-mode markdown-toc markdown-mode gh-md git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data vimrc-mode dactyl-mode xterm-color smeargle shell-pop orgit multi-term magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode helm-company helm-c-yasnippet fzf fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode helm-ext ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (olivetti tabula-rasa jedi jedi-core python-environment epc ctable concurrent visual-fill-column writeroom-mode org-re-reveal csv-mode company-auctex auctex-latexmk auctex pangu-spacing japanese-holidays evil-tutor-ja ddskk cdb ccc avy-migemo migemo ein polymode deferred websocket reveal-in-osx-finder ox-reveal company-emacs-eclim eclim pdf-tools tablist lv ox-gfm sql-indent engine-mode typit mmt sudoku pacmacs 2048-game yasnippet-snippets org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot unfill mwim rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby mmm-mode markdown-toc markdown-mode gh-md git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data vimrc-mode dactyl-mode xterm-color smeargle shell-pop orgit multi-term magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode helm-company helm-c-yasnippet fzf fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode helm-ext ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
