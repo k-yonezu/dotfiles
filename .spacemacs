@@ -703,6 +703,11 @@ you should place your code here."
               ))
   (simplenote2-setup)
 
+  ;; open junk file
+  (use-package open-junk-file :ensure t
+    :init (setq open-junk-file-format "~/.tmp/junk/%Y/%m/%Y-%m-%d-%H%M%S.")
+    :bind ("C-x j" . open-junk-file))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
