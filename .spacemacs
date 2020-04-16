@@ -94,6 +94,16 @@ values."
                                       writeroom-mode
                                       jedi
                                       simplenote2
+
+
+                                      bind-key
+                                      quickrun
+                                      migemo
+                                      impatient-mode
+                                      ox-gfm
+                                      codic
+                                      all-the-icons
+                                      all-the-icons-dired
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -429,6 +439,11 @@ you should place your code here."
                              (setq web-mode-code-indent-offset 2)
                              (setq web-mode-comment-style 2)
                              (setq web-mode-indent-style 2)
+                             (setq web-mode-enable-comment-interpolation t)
+                             (setq web-mode-enable-current-element-highlight t)
+                             (setq web-mode-enable-current-column-highlight t)
+                             ;; (setq web-mode-enable-auto-pairing t)
+                             ;; (setq web-mode-enable-auto-closing t)
                              (setq web-mode-engines-alist
                                    '(("php"    . "\\.ctp\\'"))
                                    )
@@ -703,6 +718,11 @@ you should place your code here."
               ))
   (simplenote2-setup)
 
+  ;; open junk file
+  (use-package open-junk-file :ensure t
+    :init (setq open-junk-file-format "~/.tmp/junk/%Y/%m/%Y-%m-%d-%H%M%S.")
+    :bind ("C-x j" . open-junk-file))
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -714,7 +734,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (simplenote2 olivetti tabula-rasa jedi jedi-core python-environment epc ctable concurrent visual-fill-column writeroom-mode org-re-reveal csv-mode company-auctex auctex-latexmk auctex pangu-spacing japanese-holidays evil-tutor-ja ddskk cdb ccc avy-migemo migemo ein polymode deferred websocket reveal-in-osx-finder ox-reveal company-emacs-eclim eclim pdf-tools tablist lv ox-gfm sql-indent engine-mode typit mmt sudoku pacmacs 2048-game yasnippet-snippets org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot unfill mwim rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby mmm-mode markdown-toc markdown-mode gh-md git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data vimrc-mode dactyl-mode xterm-color smeargle shell-pop orgit multi-term magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode helm-company helm-c-yasnippet fzf fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode helm-ext ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
+    (quickrun impatient-mode codic all-the-icons-dired all-the-icons memoize ace-isearch unicode-escape request-deferred names simplenote2 olivetti tabula-rasa jedi jedi-core python-environment epc ctable concurrent visual-fill-column writeroom-mode org-re-reveal csv-mode company-auctex auctex-latexmk auctex pangu-spacing japanese-holidays evil-tutor-ja ddskk cdb ccc avy-migemo migemo ein polymode deferred websocket reveal-in-osx-finder ox-reveal company-emacs-eclim eclim pdf-tools tablist lv ox-gfm sql-indent engine-mode typit mmt sudoku pacmacs 2048-game yasnippet-snippets org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-mime org-download htmlize gnuplot unfill mwim rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby mmm-mode markdown-toc markdown-mode gh-md git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter diff-hl yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data vimrc-mode dactyl-mode xterm-color smeargle shell-pop orgit multi-term magit-gitflow magit-popup helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit transient git-commit with-editor eshell-z eshell-prompt-extras esh-help phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode helm-company helm-c-yasnippet fzf fuzzy flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck company-tern dash-functional tern company-statistics company auto-yasnippet auto-dictionary ac-ispell auto-complete web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor yasnippet multiple-cursors js2-mode js-doc coffee-mode helm-ext ws-butler winum which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint indent-guide hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-themes helm-swoop helm-projectile projectile pkg-info epl helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump f dash s diminish define-word column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line helm avy helm-core popup async))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
