@@ -68,7 +68,7 @@ values."
      (syntax-checking :variables syntax-checking-enable-tooltips nil)
      (python :variables
              python-enable-yapf-format-on-save nil
-             python-sort-imports-on-save t)
+             python-sort-imports-on-save nil)
      version-control
      (version-control :variables
                       ;; version-control-diff-tool 'diff-hl
