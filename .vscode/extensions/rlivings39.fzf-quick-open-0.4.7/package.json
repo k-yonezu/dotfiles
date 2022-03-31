@@ -1,0 +1,143 @@
+{
+	"name": "fzf-quick-open",
+	"displayName": "fzf fuzzy quick open",
+	"description": "Fuzzy search files/folders and ripgrep results with fzf inside VSCode",
+	"version": "0.4.7",
+	"author": "Ryan Livingston",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/rlivings39/vscode-fzf-quick-open"
+	},
+	"publisher": "rlivings39",
+	"icon": "resources/fzficon.png",
+	"engines": {
+		"vscode": "^1.33.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:fzf-quick-open.runFzfFile",
+		"onCommand:fzf-quick-open.runFzfFilePwd",
+		"onCommand:fzf-quick-open.runFzfAddWorkspaceFolder",
+		"onCommand:fzf-quick-open.runFzfAddWorkspaceFolderPwd",
+		"onCommand:fzf-quick-open.runFzfSearch",
+		"onCommand:fzf-quick-open.runFzfSearchPwd"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "fzf-quick-open.runFzfFile",
+				"title": "fzf: Open file using fzf"
+			},
+			{
+				"command": "fzf-quick-open.runFzfFilePwd",
+				"title": "fzf: Open file in PWD using fzf"
+			},
+			{
+				"command": "fzf-quick-open.runFzfAddWorkspaceFolder",
+				"title": "fzf: Add workspace folder using fzf"
+			},
+			{
+				"command": "fzf-quick-open.runFzfAddWorkspaceFolderPwd",
+				"title": "fzf: Add workspace folder from PWD using fzf"
+			},
+			{
+				"command": "fzf-quick-open.runFzfSearch",
+				"title": "fzf: Search using rg and fzf"
+			},
+			{
+				"command": "fzf-quick-open.runFzfSearchPwd",
+				"title": "fzf: Search in PWD using rg and fzf"
+			}
+		],
+		"configuration": {
+			"title": "fzf quick open",
+			"properties": {
+				"fzf-quick-open.initialWorkingDirectory": {
+					"scope": "window",
+					"type": "string",
+					"default": "",
+					"description": "Initial working directory for fzf"
+				},
+				"fzf-quick-open.findDirectoriesCmd": {
+					"scope": "window",
+					"type": "string",
+					"default": "find . -type d",
+					"description": "Command used to find directories with fzf. For best performance install fd and use 'fd --type d'"
+				},
+				"fzf-quick-open.codeCmd": {
+					"scope": "window",
+					"type": "string",
+					"default": "code",
+					"deprecationMessage": "DEPRECATED: This option has no utility as of v0.3.0. We avoid use of the code command line API and don't need this to distinguish code from code-insiders. Please report unexpected issues based on the removal of this property.",
+					"description": "Command used to launch VSCode. Set to code-insiders if using insiders build"
+				},
+				"fzf-quick-open.fuzzyCmd": {
+					"scope": "window",
+					"type": "string",
+					"default": "fzf",
+					"description": "Command used for fuzzy searching program. E.g. fzf, sk"
+				},
+				"fzf-quick-open.ripgrepSearchStyle": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"Case sensitive",
+						"Ignore case",
+						"Smart case"
+					],
+					"markdownEnumDescriptions": [
+						"Do a case sensitive search (`--case-sensitive`)",
+						"Do a case insensitive search (`--ignore-case`)",
+						"Smart case based on search string (`--smart-case`)"
+					],
+					"default": "Case sensitive",
+					"description": "Command used for fuzzy searching program. E.g. fzf, sk"
+				},
+				"fzf-quick-open.ripgrepOptions": {
+					"scope": "window",
+					"type": "string",
+					"default": [],
+					"description": "Options to pass to rg"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "tslint -p ./",
+		"pretest": "npm run compile",
+		"test": "node ./out/test/runTest.js",
+		"coverage": "COVERAGE=1 nyc npm run test",
+		"package": "npm run compile && vsce package",
+		"publish": "npm run compile && vsce publish"
+	},
+	"devDependencies": {
+		"@types/chai": "^4.2.8",
+		"@types/glob": "^7.1.1",
+		"@types/mocha": "^5.2.6",
+		"@types/node": "^6.14.10",
+		"@types/vscode": "^1.33.0",
+		"chai": "^4.2.0",
+		"glob": "^7.1.4",
+		"minimist": "^1.2.5",
+		"mocha": "^6.1.4",
+		"nyc": "^15.0.0",
+		"tslint": "^5.16.0",
+		"typescript": "^4.4.4",
+		"vsce": "^2.3.0",
+		"vscode-test": "^1.0.0"
+	},
+	"__metadata": {
+		"id": "b0ed338a-0ae4-40bc-abc8-30541d98e90e",
+		"publisherId": "a0a3e150-0854-496e-9cb8-4abd06015feb",
+		"publisherDisplayName": "rlivings39",
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1646324271496
+	}
+}
