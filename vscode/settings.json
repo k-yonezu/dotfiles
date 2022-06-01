@@ -1,0 +1,310 @@
+{
+    "glassit.alpha": 150,
+    "workbench.iconTheme": "material-icon-theme",
+    "glassit-linux.opacity": 30,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "all",
+    "files.trimTrailingWhitespace": true,
+    "vim.leader": "<space>",
+    "vim.useSystemClipboard": true,
+    "vim.useCtrlKeys": true,
+    "vim.easymotion": true,
+    "vim.visualstar": true,
+    "vim.hlsearch": true,
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "u"
+            ],
+            "commands": [
+                {
+                    "command": "undo"
+                }
+            ]
+        },
+        {
+            "before": [
+                "<C-r>"
+            ],
+            "commands": [
+                {
+                    "command": "redo"
+                }
+            ]
+        },
+        {
+            "before": [
+                "x"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "x"
+            ]
+        },
+        {
+            "before": [
+                "s"
+            ],
+            "after": [
+                "\"",
+                "_",
+                "s"
+            ]
+        },
+        {
+            "before": [
+                "j"
+            ],
+            "after": [
+                "g",
+                "j"
+            ]
+        },
+        {
+            "before": [
+                "k"
+            ],
+            "after": [
+                "g",
+                "k"
+            ]
+        },
+        {
+            "before": [
+                "n"
+            ],
+            "after": [
+                "n",
+                "z",
+                "z"
+            ]
+        },
+        {
+            "before": [
+                "N"
+            ],
+            "after": [
+                "N",
+                "z",
+                "z"
+            ]
+        },
+        {
+            "before": [
+                "*"
+            ],
+            "after": [
+                "*",
+                "z",
+                "z"
+            ]
+        },
+        {
+            "before": [
+                "#"
+            ],
+            "after": [
+                "#",
+                "z",
+                "z"
+            ]
+        },
+        {
+            "before": [
+                "<Enter>"
+            ],
+            "commands": [
+                "editor.action.insertLineAfter"
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "c"
+            ],
+            "commands": [
+                {
+                    "command": "editor.action.commentLine"
+                }
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "w"
+            ],
+            "after": [],
+            "commands": [
+                {
+                    "command": "workbench.action.files.save",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "q"
+            ],
+            "after": [],
+            "commands": [
+                {
+                    "command": "workbench.action.closeActiveEditor",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "x"
+            ],
+            "after": [],
+            "commands": [
+                {
+                    "command": "editor.action.formatDocument",
+                    "args": []
+                }
+            ]
+        },
+        {
+            "before": [
+                "L"
+            ],
+            "after": [
+                "$"
+            ]
+        },
+        {
+            "before": [
+                "H"
+            ],
+            "after": [
+                "^"
+            ]
+        },
+        {
+            "before": [
+                "K"
+            ],
+            "after": [
+                "1",
+                "0",
+                "k"
+            ]
+        },
+        {
+            "before": [
+                "J"
+            ],
+            "after": [
+                "1",
+                "0",
+                "j"
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "m"
+            ],
+            "after": [
+                "%"
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "z"
+            ],
+            "commands": [
+                ":noh"
+            ]
+        }
+    ],
+    "vim.insertModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "f",
+                "d"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        },
+        {
+            "before": [
+                ";",
+                ";"
+            ],
+            "commands": [
+                "editor.action.triggerSuggest"
+            ]
+        },
+    ],
+    "vim.visualModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "L"
+            ],
+            "after": [
+                "$"
+            ]
+        },
+        {
+            "before": [
+                "H"
+            ],
+            "after": [
+                "^"
+            ]
+        },
+        {
+            "before": [
+                "K"
+            ],
+            "after": [
+                "1",
+                "0",
+                "k"
+            ]
+        },
+        {
+            "before": [
+                "J"
+            ],
+            "after": [
+                "1",
+                "0",
+                "j"
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "m"
+            ],
+            "after": [
+                "%"
+            ]
+        },
+        {
+            "before": [
+                ">"
+            ],
+            "commands": [
+                "editor.action.indentLines"
+            ]
+        },
+        {
+            "before": [
+                "<"
+            ],
+            "commands": [
+                "editor.action.outdentLines"
+            ]
+        },
+    ],
+    "go.toolsManagement.autoUpdate": true,
+}

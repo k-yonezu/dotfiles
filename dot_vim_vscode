@@ -1,0 +1,159 @@
+set encoding=utf-8
+scriptencoding utf-8
+" ↑1行目は読み込み時の文字コードの設定
+" ↑2行目はVim Script内でマルチバイトを使う場合の設定
+" Vim scritptにvimrcも含まれるので、日本語でコメントを書く場合は先頭にこの設定が必要になる
+
+let mapleader = "\<Space>"
+
+" ノーマルモード時だけ ; と : を入れ替える
+nnoremap ;  :
+nnoremap :  ;
+vnoremap ;  :
+vnoremap :  ;
+
+
+" --------- vim setting --------
+" バックスラッシュやクエスチョンを状況に合わせ自動的にエスケープ
+cnoremap <expr> / getcmdtype() == '/' ? '\/' : '/'
+cnoremap <expr> ? getcmdtype() == '?' ? '\?' : '?'
+
+" ESCキー2度押しでハイライトの切り替え
+nnoremap <silent><Esc><Esc> :<C-u>set nohlsearch!<CR>
+" ESCを二回押すことでハイライトを消す
+" nmap <silent> <Esc><Esc> :nohlsearch<CR>
+
+
+" バックスペースでなんでも消せるようにする
+set backspace=indent,eol,start
+
+" 前時代的スクリーンベルを無効化
+set t_vb=
+set novisualbell
+
+
+
+"----------------------------------------------------------
+" マクロおよびキー設定 keymap
+"----------------------------------------------------------
+" 行末
+nnoremap H ^
+vnoremap H ^
+nnoremap L $
+vnoremap L $h
+
+" 段落単位での移動
+nnoremap } J
+
+nnoremap K 10k
+nnoremap J 10j
+vnoremap K 10k
+vnoremap J 10j
+
+
+" 検索
+nnoremap * *<C-o>
+nnoremap g* g*<C-o>
+
+" インデント
+vnoremap > >gv
+vnoremap < <gv
+
+" 向きがそろえる
+" nnoremap <expr> n <SID>search_forward_p() ? 'nzv' : 'Nzv'
+" nnoremap <expr> N <SID>search_forward_p() ? 'Nzv' : 'nzv'
+" vnoremap <expr> n <SID>search_forward_p() ? 'nzv' : 'Nzv'
+" vnoremap <expr> N <SID>search_forward_p() ? 'Nzv' : 'nzv'
+"
+" function! s:search_forward_p()
+"   return exists('v:searchforward') ? v:searchforward : 1
+" endfunction
+
+" ファイル保存
+nnoremap <leader>fs  :<C-u>w<CR>
+nnoremap <leader>q  :<C-u>q<CR>
+nnoremap <leader>Q  :<C-u>q!<CR>
+
+" 空行の挿入
+nnoremap <silent><leader>o  :<C-u>for i in range(v:count1) \| call append(line('.'), '') \| endfor<CR>
+nnoremap <silent><leader>O  :<C-u>for i in range(v:count1) \| call append(line('.')-1, '') \| endfor<CR>
+
+" ペースト
+vnoremap <silent> y y`]
+vnoremap <silent> p p`]
+nnoremap <silent> p p`]
+
+" タブ
+nnoremap <silent> tt  :<C-u>tabe<CR>
+nnoremap <C-h>  gT
+nnoremap <C-l>  gt
+
+" 危険なキー
+nnoremap ZZ <Nop>
+nnoremap ZQ <Nop>
+
+nnoremap Q gq
+
+" バックスペースキーの有効化
+set backspace=indent,eol,start
+
+" jjでエスケープ
+inoremap <silent> fd <ESC>
+
+" 日本語入力で”っj”と入力してもEnterキーで確定させればインサートモードを抜ける
+inoremap <silent> っj <ESC>
+
+" 日本語入力がオンのままでも使えるコマンド(Enterキーは必要)
+nnoremap あ a
+nnoremap い i
+nnoremap う u
+nnoremap お o
+nnoremap っd dd
+nnoremap っy yy
+
+" 置換
+nnoremap gs  :<C-u>%s///g<Left><Left><Left>
+vnoremap gs  :s///g<Left><Left><Left>
+
+" コマンドライン emacsライク
+cnoremap <C-f>  <Right>
+cnoremap <C-b>  <Left>
+cnoremap <C-a>  <C-b>
+cnoremap <C-e>  <C-e>
+cnoremap <C-u> <C-e><C-u>
+cnoremap <C-v> <C-f>a
+
+" text
+onoremap aa  a>
+onoremap ia  i>
+onoremap ar  a]
+onoremap ir  i]
+onoremap ad  a"
+onoremap id  i"
+
+set whichwrap=b,s,h,l,<,>,[,],~ " カーソルの左右移動で行末から次の行の行頭への移動が可能になる
+
+" 行が折り返し表示されていた場合、行単位ではなく表示行単位でカーソルを移動する
+nnoremap k   gk
+nnoremap j   gj
+vnoremap k   gk
+vnoremap j   gj
+nnoremap gk  k
+nnoremap gj  j
+vnoremap gk  k
+vnoremap gj  j
+
+" カーソル下の単語を * で検索
+vnoremap <silent> * "vy/\V<C-r>=substitute(escape(@v, '\/'), "\n", '\\n', 'g')<CR><CR>
+
+" 検索後にジャンプした際に検索単語を画面中央に持ってくる
+" nnoremap n nzz
+" nnoremap N Nzz
+" nnoremap * *zz
+" nnoremap # #zz
+" nnoremap g* g*zz
+" nnoremap g# g#zz
+
+" vを二回で行末まで選択
+vnoremap v $h
+
