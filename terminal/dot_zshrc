@@ -23,30 +23,32 @@ fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export CFLAGS="-I$(brew --prefix zlib)/include -I$(brew --prefix openssl)/include -I$(brew --prefix bzip2)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include"
-export LDFLAGS="-L$(brew --prefix zlib)/lib -L$(brew --prefix openssl)/lib -L$(brew --prefix bzip2)/lib -L$(brew --prefix readline)/lib"
+export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
+export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 export PATH="$HOME/.poetry/bin:$PATH"
+export POETRY_VIRTUALENVS_IN_PROJECT=true
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH="/opt/homebrew/bin:$PATH"
+
+eval "$(/usr/local/Homebrew/bin/brew shellenv)"
+export PATH="/usr/local/Homebrew/bin:$PATH"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$HOME/.pyenv/bin:$PATH"
 
 
 eval "$(pyenv init -)"
-eval "$(pyenv init --path)"
 
 
 autoload -Uz promptinit
 promptinit
 prompt powerlevel10k
 
-alias le="exa -l -h -@ -mU --icons --git --time-style=long-iso --color=automatic --group-directories-first"
-alias lea="le -aa"
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+alias ll="exa -l -h -@ -mU --icons --git --time-style=long-iso --color=automatic --group-directories-first"
+alias l="ll -aa"
+source /usr/local/opt/zsh-syntax-highlighting/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+alias kc="kubectl"

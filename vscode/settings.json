@@ -158,7 +158,7 @@
         {
             "before": [
                 "<Leader>",
-                "x"
+                "<Tab>"
             ],
             "after": [],
             "commands": [
@@ -303,6 +303,39 @@
             ],
             "commands": [
                 "editor.action.outdentLines"
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "c"
+            ],
+            "commands": [
+                {
+                    "command": "editor.action.commentLine"
+                }
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "j"
+            ],
+            "commands": [
+                {
+                    "command": "references-view.findReferences"
+                }
+            ]
+        },
+        {
+            "before": [
+                "<Leader>",
+                "/"
+            ],
+            "commands": [
+                {
+                    "command": "workbench.action.findInFiles"
+                }
             ]
         },
     ],
