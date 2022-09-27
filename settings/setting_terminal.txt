@@ -6,8 +6,8 @@ Iceberg
 
 # zsh
 インストール
-$ brew update
-$ brew install zsh
+brew update
+brew install zsh
 
 /etc/shellsに追加
 /bin/bash
@@ -51,4 +51,23 @@ zstyle ':prezto:load' pmodule \
   'autosuggestions' \ # 追加
   'prompt' \
 
-$ source ~/.zpreztorc
+source ~/.zpreztorc
+
+prompt -s powerlevel10k
+
+# in zsh
+autoload -Uz promptinit
+promptinit
+prompt powerlevel10k
+
+# command
+brew install exa
+brew install bat
+brew install zsh-syntax-highlighting
+
+# zshrc
+source /home/linuxbrew/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+alias g=git
+alias ll="exa -l -h -@ -mU --icons --git --time-style=long-iso --color=automatic --group-directories-first"
+alias l="ll -aa"
+
