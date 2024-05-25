@@ -51,6 +51,9 @@ source /usr/local/opt/zsh-syntax-highlighting/share/zsh-syntax-highlighting/zsh-
 
 # alias
 alias g=git
-alias ll="exa -l -h -@ -mU --icons --git --time-style=long-iso --color=automatic --group-directories-first"
-alias l="ll -aa"
+alias ls='lsd'
+alias l='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lt='ls --tree'
 alias kc="kubectl"
