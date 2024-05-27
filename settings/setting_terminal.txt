@@ -8,6 +8,7 @@ Iceberg
 インストール
 brew update
 brew install zsh
+brew install font-Hack-nerd-font
 
 /etc/shellsに追加
 /bin/bash
