@@ -8,7 +8,6 @@ Iceberg
 インストール
 brew update
 brew install zsh
-brew install font-Hack-nerd-font
 
 /etc/shellsに追加
 /bin/bash
@@ -21,6 +20,13 @@ brew install font-Hack-nerd-font
 /usr/local/bin/zsh
 
 $ chsh -s /usr/local/bin/zsh
+
+# install
+brew install font-Hack-nerd-font
+brew install lsd
+brew install bat
+brew install zsh-syntax-highlighting
+source /home/linuxbrew/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # プロンプト
 $ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
@@ -60,11 +66,5 @@ prompt -s powerlevel10k
 autoload -Uz promptinit
 promptinit
 prompt powerlevel10k
-
-# command
-brew install lsd
-brew install bat
-brew install zsh-syntax-highlighting
-source /home/linuxbrew/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
