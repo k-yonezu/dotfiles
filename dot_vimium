@@ -1,0 +1,7 @@
+map h previousTab
+map l nextTab
+map J scrollPageDown
+map K scrollPageUp
+map i focusInput
+map <c-f> scrollFullPageDown
+map <c-b> scrollFullPageUp
