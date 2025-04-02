@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #
 # Executes commands at the start of an interactive session.
 #
@@ -12,48 +19,37 @@ fi
 
 # Customize to your needs...
 
-# settings for mac
-eval "$(/usr/local/Homebrew/bin/brew shellenv)"
-export PATH="/usr/local/Homebrew/bin:$PATH"
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
-export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
-# prompt
 autoload -Uz promptinit
 promptinit
 prompt powerlevel10k
 
-# FZF
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+  # FZF
+  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+  # poetry
+  export PATH="$HOME/.poetry/bin:$PATH"
+  export PATH="$HOME/.local/bin:$PATH"
+  export POETRY_VIRTUALENVS_IN_PROJECT=true
 
-# poetry
-export PATH="$HOME/.poetry/bin:$PATH"
-export POETRY_VIRTUALENVS_IN_PROJECT=true
+  # pyenv
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$HOME/.pyenv/bin:$PATH"
+  eval "$(pyenv init -)"
 
-# ptyenv
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
+  # nodeenv
+  eval "$(nodenv init - --no-rehash)"
 
-# highlight
-source /usr/local/opt/zsh-syntax-highlighting/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  # highlight
+  source /home/linuxbrew/.linuxbrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# alias
-alias g=git
-alias ls='lsd'
-alias l='ls -l'
-alias la='ls -a'
-alias lla='ls -la'
-alias lt='ls --tree'
-alias kc="kubectl"
+  # alias
+  alias g=git
+  alias ll="exa -l -h -@ -mU --icons --git --time-style=long-iso --color=automatic --group-directories-first"
+  alias l="ll -aa"
+  alias kc="kubectl"
+
+  # deta
+  export PATH="$HOME/.deta/bin:$PATH"
