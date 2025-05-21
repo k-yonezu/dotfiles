@@ -1,10 +1,14 @@
 {
-    "glassit.alpha": 150,
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": false,
+    "files.insertFinalNewline": false,
+    "files.encoding": "utf8",
+    "git.path": "/usr/bin/git"
+    "glassit.alpha": 240,
     "workbench.iconTheme": "material-icon-theme",
     "glassit-linux.opacity": 30,
     "editor.minimap.enabled": false,
     "editor.renderWhitespace": "all",
-    "files.trimTrailingWhitespace": true,
     "vim.leader": "<space>",
     "vim.useSystemClipboard": true,
     "vim.useCtrlKeys": true,
@@ -340,4 +344,37 @@
         },
     ],
     "go.toolsManagement.autoUpdate": true,
+    "workbench.settings.applyToAllProfiles": [
+    ],
+    "cmake.configureSettings": {},
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu-22.04 (WSL)": {
+            "path": "C:\\WINDOWS\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Ubuntu-22.04 (WSL)",
+    "security.allowedUNCHosts": [
+        "wsl.localhost"
+    ],
+    "workbench.editor.enablePreview": false,
+    "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font",
 }

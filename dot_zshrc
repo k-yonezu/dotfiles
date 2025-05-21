@@ -1,0 +1,50 @@
+# p10kの初期設定を飛ばす
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+
+# 初期設定 start
+# ~/.p10k.zshを読み込む
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+plugins=(git)
+source $ZSH/oh-my-zsh.sh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# alias
+alias g=git
+alias ll="exa -l -h -@ -mU --icons --git --time-style=long-iso --color=automatic --group-directories-first"
+alias l="ll -aa"
+alias kc="kubectl"
+
+# 環境変数
+## vim
+export EDITOR=vim
+export SUDO_EDITOR=vim
+
+# path
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# vimがなくてもvimでviを起動する。
+if ! type vim > /dev/null 2>&1; then
+  alias vim=vi
+fi
+
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$HOME/.pyenv/bin:$PATH"
+if type pyenv > /dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# poetry
+if type poetry > /dev/null 2>&1; then
+  export PATH="$HOME/.poetry/bin:$PATH"
+  export PATH="$HOME/.local/bin:$PATH"
+  export POETRY_VIRTUALENVS_IN_PROJECT=true
+fi
+
+# 初期設定 end
+# その他の設定
+

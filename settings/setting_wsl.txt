@@ -1,9 +1,0 @@
-sudo update-alternatives --config editor
-
-~/.zprofile
-export EDITOR=vim
-export SUDO_EDITOR=vim
-
-/etc/wsl.conf
-[interop]
-appendWindowsPath = false
