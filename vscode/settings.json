@@ -3,12 +3,9 @@
     "files.trimTrailingWhitespace": false,
     "files.insertFinalNewline": false,
     "files.encoding": "utf8",
-    "git.path": "/usr/bin/git"
+    "git.path": "/usr/bin/git",
     "glassit.alpha": 240,
-    "workbench.iconTheme": "material-icon-theme",
-    "glassit-linux.opacity": 30,
     "editor.minimap.enabled": false,
-    "editor.renderWhitespace": "all",
     "vim.leader": "<space>",
     "vim.useSystemClipboard": true,
     "vim.useCtrlKeys": true,
@@ -372,9 +369,81 @@
         }
     },
     "terminal.integrated.defaultProfile.windows": "Ubuntu-22.04 (WSL)",
+    "terminal.integrated.defaultProfile.osx": "zsh",
     "security.allowedUNCHosts": [
         "wsl.localhost"
     ],
     "workbench.editor.enablePreview": false,
-    "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font",
+    "terminal.integrated.fontFamily": "HackGen35 Console NF",
+    "terminal.integrated.fontSize": 14,
+
+    // ファイルアイコンテーマを設定
+    "workbench.iconTheme": "material-icon-theme",
+    // 新規ウィンドウを最後に開いたウィンドウと同じサイズで開く
+    "window.newWindowDimensions": "inherit",
+    // タブ幅指定
+    "editor.tabSize": 2,
+    // カーソル移動の動きを滑らかなアニメーションにする
+    "editor.cursorSmoothCaretAnimation": "on",
+    // フォント指定
+    "editor.fontFamily": "HackGen35 Console NF",
+    // テキストを折り返して表示する
+    "editor.wordWrap": "on",
+    // フォントサイズ指定
+    "editor.fontSize": 14,
+    // 入力中にクイックサジェストを表示する（コメント、文字列リテラル内）
+    "editor.quickSuggestions": {
+        "comments": "on",
+        "strings": "on"
+    },
+    // スニペット接頭辞を入力し、tabキーで挿入する
+    "editor.tabCompletion": "on",
+    // エメットをtabキーで展開する
+    "emmet.triggerExpansionOnTab": true,
+    // ファイルツリーのインデント幅を指定
+    "workbench.tree.indent": 16,
+    // 保存時に自動整形する
+    "editor.formatOnSave": true,
+    // ファイル拡張子を言語に関連付ける
+    "files.associations": {
+        "*.tsx": "typescriptreact"
+    },
+    // デフォルトフォーマッター指定
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    // 数字や文字列、関数などのカラー設定が可能。ここではコメントのテキストカラーを指定。
+    "editor.tokenColorCustomizations": {
+        "comments": "#c0c0c0"
+    },
+    // 空白文字を可視化。none, all, boundary：単語間の単一スペースは可視化しない。
+    "editor.renderWhitespace": "boundary",
+    // インデント、アクティブタブ、ステータスバーのカラー指定
+    "workbench.colorCustomizations": {
+        "editorIndentGuide.background1": "#cb997e",
+        "editorIndentGuide.background2": "#ddbea9",
+        "editorIndentGuide.background3": "#ffe8d6",
+        "editorIndentGuide.background4": "#b7b7a4",
+        "editorIndentGuide.background5": "#a5a58d",
+        "editorIndentGuide.background6": "#6b705c",
+        "editorIndentGuide.activeBackground1": "#06d6a0",
+        "editorIndentGuide.activeBackground2": "#06d6a0",
+        "editorIndentGuide.activeBackground3": "#06d6a0",
+        "editorIndentGuide.activeBackground4": "#06d6a0",
+        "editorIndentGuide.activeBackground5": "#06d6a0",
+        "editorIndentGuide.activeBackground6": "#06d6a0",
+        "tab.activeBackground": "#7442ad",
+        "tab.activeForeground": "#d3d2d4",
+        "statusBar.background": "#53208c"
+    },
+    "workbench.activityBar.orientation": "vertical",
 }
